@@ -1,11 +1,12 @@
-FROM node:20-alpine AS build
+FROM node:20-bullseye AS build
+
 WORKDIR /app
 COPY package*.json ./
 RUN npm install --silent
 COPY . .
 RUN npm run build
 
-
+# Production stage
 FROM nginx:stable-alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
