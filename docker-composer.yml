@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+backend:
+build: ./backend
+ports:
+- '3000:3000'
+volumes:
+- ./backend/src:/app/src
+- ./uploads:/app/uploads
+- ./jobs:/app/jobs
+- ./results:/app/results
+worker:
+build: ./worker
