@@ -2,13 +2,15 @@ FROM node:20-bullseye
 
 WORKDIR /app
 
-# Copy package files first (better caching)
 COPY package*.json ./
 
-# Install deps (include dev deps so we don’t miss anything)
-RUN npm install --silent
+# Install build tools (needed for some native npm packages)
+RUN apt-get update && apt-get install -y python3 g++ make \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy source code
+# Install deps (force legacy mode to avoid peer issues)
+RUN npm install --legacy-peer-deps --silent
+
 COPY . .
 
 EXPOSE 3000
